@@ -5,4 +5,4 @@ vim:
 ~/.vimrc:
   file.managed:
     - source:
-      - file:///srv/salt/vim/.vimrc
+      - file:///srv/salt/vim/vimrc
