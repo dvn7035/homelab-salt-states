@@ -1,5 +1,6 @@
 base:
   '*':
+    - iptables.iptables
     - vim.vim
     - openssh-server.openssh-server
-    - ufw.ufw
+    - docker.docker
