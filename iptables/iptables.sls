@@ -32,6 +32,7 @@ allow_outgoing_lo:
     - jump: ACCEPT
     - save: True
 
+# allow established and related networking
 allow_established_related_incoming:
   iptables.append:
     - table: filter
@@ -41,15 +42,15 @@ allow_established_related_incoming:
     - jump: ACCEPT
     - save: True
 
-allow_established_outgoing:
-  iptables.append:
+# by default allow all outgoing
+default_allow_outgoing:
+  iptables.set_policy:
     - table: filter
     - chain: OUTPUT
-    - match: conntrack
-    - ctstate: ESTABLISHED
-    - jump: ACCEPT
+    - policy: ACCEPT
     - save: True
 
+# otherwise default policy drop all packets
 default_incoming_drop:
   iptables.set_policy:
     - table: filter
@@ -63,4 +64,3 @@ default_forward_drop:
     - chain: FORWARD
     - policy: DROP
     - save: True
-
