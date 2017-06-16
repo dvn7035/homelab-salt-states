@@ -20,3 +20,9 @@ ssh:
     - user: root
     - group: root
     - mode: 600
+    - makedirs: True
+
+pi:
+  user.absent:
+    - purge: True
+    - force: True
