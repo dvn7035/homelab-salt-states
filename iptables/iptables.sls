@@ -12,7 +12,15 @@ allow_ssh:
     - proto: tcp
     - dport: 22
     - save: True
- 
+
+# allow ICMP
+allow_ICMP:
+  iptables.append:
+    - table: filter
+    - chain: INPUT
+    - protocol: icmp
+    - jump: ACCEPT
+
 # general firewall policies
 
 # allow loopback connections

@@ -5,5 +5,5 @@
     - source: file:///srv/salt/salt/minion
 
 #TODO: figure out the right way to do this with the service module
-systemctl restart salt-minion:
+service salt-minion force-reload:
   cmd.run

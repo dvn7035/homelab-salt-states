@@ -2,11 +2,6 @@ openssh-server:
   pkg:
     - installed
 
-ssh:
-  service.running:
-    - enable: True
-    - restart: True
-
 /etc/sshd_config:
   file.managed:
     - source: file:///srv/salt/openssh-server/sshd_config
@@ -21,6 +16,14 @@ ssh:
     - group: root
     - mode: 600
     - makedirs: True
+
+# ssh:
+#  service.running:
+#    - enable: True
+#    - reload: True
+
+service ssh force-reload:
+  cmd.run
 
 pi:
   user.absent:
