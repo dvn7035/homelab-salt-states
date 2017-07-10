@@ -4,7 +4,6 @@
   file.managed:
     - source: file:///srv/salt/salt/minion
 
-salt-minion:
-  service.running:
-    - enable: True
-    - reload: True
+#TODO: figure out the right way to do this with the service module
+systemctl restart salt-minion:
+  cmd.run
