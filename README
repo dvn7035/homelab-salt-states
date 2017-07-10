@@ -5,6 +5,10 @@ configuration only applies to my situation (e.g. the sshd_config
 file specifies that my private ssh key can log in as root over ssh;
 probably something you don't want me to be able to do to your pi).
 
-To apply this salt state on a computer make sure you
-have the salt-minion program installed. Then move this entire
-folder to /srv/salt and run salt-call --local state.apply
+To apply this salt state:
+
+curl -o bootstrap-salt.sh -L https://bootstrap.saltstack.com
+sudo sh bootstrap-salt.sh git develop
+git clone https://github.com/dvn7035/salt-journey.git
+ln -s salt-journey/ /srv/salt
+salt-call --local state.apply
