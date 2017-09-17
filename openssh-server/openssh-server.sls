@@ -2,28 +2,23 @@ openssh-server:
   pkg:
     - installed
 
-/etc/sshd_config:
+ssh:
   file.managed:
+    - name: /etc/sshd_config
     - source: file:///srv/salt/openssh-server/sshd_config
     - user: root
     - group: root
     - mode: 644
-
-~/.ssh/authorized_keys:
   file.managed:
     - source: file:///srv/salt/openssh-server/authorized_keys
     - user: root
     - group: root
     - mode: 600
     - makedirs: True
-
-# ssh:
-#  service.running:
-#    - enable: True
-#    - reload: True
-
-service ssh force-reload:
-  cmd.run
+  service.running:
+    - watch:
+      - file: ~/.ssh/authorized_keys
+      - file: /etc/sshd_config
 
 pi:
   user.absent:
