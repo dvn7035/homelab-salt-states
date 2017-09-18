@@ -1,9 +1,9 @@
-# Minion set up
-
+# Minion set up to run headless
 /etc/salt/minion:
   file.managed:
     - source: file:///srv/salt/salt/minion
 
-#TODO: figure out the right way to do this with the service module
-service salt-minion force-reload:
-  cmd.run
+salt-minion:
+  service.running:
+    - watch:
+      - file: /etc/salt/minion
