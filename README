@@ -1,14 +1,18 @@
 This is my configuration for my raspberry pi. The states are meant
 to be run headless without a salt master server. You can use this
 as inspiration for projects on your pi, but be aware some of the
-configuration only applies to my situation (e.g. the sshd_config
+configuration only applies to my situation (e.g. the authorized_key
 file specifies that my private ssh key can log in as root over ssh;
 probably something you don't want me to be able to do to your pi).
 
-To apply this salt state:
+To apply this salt state from a new raspberry pi install:
 
-curl -o bootstrap-salt.sh -L https://bootstrap.saltstack.com
-sudo sh bootstrap-salt.sh git develop
-git clone https://github.com/dvn7035/salt-journey.git
-ln -s salt-journey/ /srv/salt
-salt-call --local state.apply
+
+Follow instructions here to install salt-minion
+https://repo.saltstack.com/#debian
+
+Then run:
+# apt install git
+# git clone https://github.com/dvn7035/raspberry-pi-salt-states.git
+# ln -s salt-journey /srv/salt
+# salt-call --local state.apply
