@@ -5,9 +5,6 @@ configuration only applies to my situation (e.g. the authorized_key
 file specifies that my private ssh key can log in as root over ssh;
 probably something you don't want me to be able to do to your pi).
 
-To apply this salt state from a new raspberry pi install:
-
-
 Follow instructions here to install salt-minion
 https://repo.saltstack.com/#debian
 
