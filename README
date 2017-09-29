@@ -6,7 +6,7 @@ file specifies that my private ssh key can log in as root over ssh;
 probably something you don't want me to be able to do to your pi).
 
 Follow instructions here to install salt-minion
-https://repo.saltstack.com/#debian
+https://repo.saltstack.com/#raspbian
 
 Then run:
 # apt install git
