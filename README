@@ -11,5 +11,5 @@ https://repo.saltstack.com/#raspbian
 Then run:
 # apt install git
 # git clone https://github.com/dvn7035/raspberry-pi-salt-states.git
-# ln -s salt-journey /srv/salt
+# ln -s $(pwd)/raspberry-pi-salt-states/ /srv/salt
 # salt-call --local state.apply
