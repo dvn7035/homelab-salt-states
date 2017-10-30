@@ -4,7 +4,7 @@ openssh-server:
 
 sshd_config:
   file.managed:
-    - name: /etc/sshd_config
+    - name: /etc/ssh/sshd_config
     - source: file:///srv/salt/openssh-server/sshd_config
     - user: root
     - group: root
@@ -23,7 +23,7 @@ ssh:
   service.running:
     - reload: True
     - watch:
-      - file: /etc/sshd_config
+      - file: /etc/ssh/sshd_config
       - file: ~/.ssh/authorized_keys
 pi:
   user.absent:
