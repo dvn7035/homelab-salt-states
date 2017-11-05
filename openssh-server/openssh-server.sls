@@ -2,6 +2,16 @@ openssh-server:
   pkg:
     - installed
 
+# open tcp 22 for ssh
+allow_ssh:
+  iptables.append:
+    - table: filter
+    - chain: INPUT
+    - jump: ACCEPT
+    - proto: tcp
+    - dport: 22
+    - save: True
+
 sshd_config:
   file.managed:
     - name: /etc/ssh/sshd_config
