@@ -6,3 +6,4 @@ base:
     #- docker.docker
     - bash_settings.bash_settings
     - salt.salt
+    - bind9.bind9

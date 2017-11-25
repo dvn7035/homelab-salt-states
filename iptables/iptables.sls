@@ -6,27 +6,6 @@ iptables-persistent:
 
 # iptables defaults
 
-# open tcp 53 for dns
-# TODO: Move into own bind9 state when done
-allow_dns_tcp:
-  iptables.append:
-    - table: filter
-    - chain: INPUT
-    - jump: ACCEPT
-    - proto: tcp
-    - dport: 53
-    - save: True
-
-# open udp 53 for dns
-allow_dns_udp:
-  iptables.append:
-    - table: filter
-    - chain: INPUT
-    - jump: ACCEPT
-    - proto: udp
-    - dport: 53
-    - save: True
-
 # allow ICMP
 allow_ICMP:
   iptables.append:
@@ -34,8 +13,6 @@ allow_ICMP:
     - chain: INPUT
     - protocol: icmp
     - jump: ACCEPT
-
-# general firewall policies
 
 # allow loopback connections
 allow_incoming_lo:

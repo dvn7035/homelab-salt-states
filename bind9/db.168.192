@@ -1,0 +1,13 @@
+$TTL 600
+@ IN SOA whitebase.dvn7035.com. admin.dvn7035.com. (
+                            1       ;serial
+                            600     ;refresh
+                            600     ;retry
+                            600     ;expire
+                            600 )   ;minimum
+
+; name servers -NS records
+    IN NS whitebase.dvn7035.com.
+
+;A Records
+254.0   IN  PTR whitebase.dvn7035.com. ;192.168.0.254

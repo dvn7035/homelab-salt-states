@@ -5,5 +5,6 @@
 
 salt-minion:
   service.running:
+    - reload: True
     - watch:
       - file: /etc/salt/minion
