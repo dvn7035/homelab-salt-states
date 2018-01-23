@@ -1,9 +1,8 @@
 base:
   '*':
-    - iptables.iptables
-    - vim.vim
-    - openssh-server.openssh-server
-    #- docker.docker
-    - bash_settings.bash_settings
-    - salt.salt
-    - bind9.bind9
+    - iptables
+    - vim
+    - openssh-server
+    - bash_settings
+    - salt
+    - bind9

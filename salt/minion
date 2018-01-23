@@ -13,7 +13,7 @@
 
 # Set the location of the salt master server. If the master server cannot be
 # resolved, then the minion will fail to start.
-#master: salt
+master: whitebase.dvn7035.com
 
 # Set http proxy information for the minion when doing requests
 #proxy_host:
@@ -40,7 +40,7 @@
 # using failover.
 # Setting master_type to 'disable' let's you have a running minion (with engines and
 # beacons) without a master connection
-master_type: disable
+master_type: str
 
 # Poll interval in seconds for checking if the master is still there.  Only
 # respected if master_type above is "failover". To disable the interval entirely,
