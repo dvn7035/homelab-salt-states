@@ -1,8 +1,8 @@
 base:
   '*':
-    - iptables
     - vim
-    - openssh-server
     - bash_settings
-    - salt
-    - bind9
+    - openssh-server
+    - iptables-base
+    - router
+    - salt-minion-no-master

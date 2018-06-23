@@ -1,3 +1,7 @@
+#TODO: saltstack needs this for module.run; you can take this away at a later version
+use_superseded:
+  - module.run
+
 ##### Primary configuration settings #####
 ##########################################
 # This configuration file is used to manage the behavior of the Salt Minion.

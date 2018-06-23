@@ -1,5 +1,5 @@
 # configure interfaces
-dhcpcd_conf:
+dhcpcd_configuration:
   file.managed:
     - name: /etc/dhcpcd.conf
     - source: file:///srv/salt/router/dhcpcd.conf
@@ -13,18 +13,25 @@ dhcpcd:
     - watch:
         - file: /etc/dhcpcd.conf 
 
+# TODO: Figure out how sysctl.assign as a state
 # forward ipv4 and disable ipv6
-sysctl:
-  sysctl.assign:
-    - net.ipv4.ip_forward: 1
-    - net.ipv6.conf.all.disable_ipv6: 1
-    - net.ipv6.conf.default.disable_ipv6: 1
-    - net.ipv6.conf.lo.disable_ipv6: 1 
+enable_ipv4_forwarding:
+  module.run:
+    - sysctl.assign:
+      - name: net.ipv4.ip_forward
+      - value: 1
+
+disable_ipv6:
+  module.run:
+    - sysctl.assign:
+      - name: net.ipv6.conf.all.disable_ipv6
+      - value: 1
 
 # dnsmasq for dhcp and dns
-dnsmasq:
-  pkg:
-    - installed
+install_dnsmasq:
+  pkg.installed:
+    - pkgs:
+      - dnsmasq
 
 dnsmasq_configuration:
   file.managed:
@@ -52,13 +59,55 @@ forward_all_originating_LAN:
     - jump: ACCEPT
     - save: True 
 
-# allow all incoming originating from LAN
-allow_incoming_LAN:
+# allow dhcp from LAN
+allow_dhcp_lan:
   iptables.append:
     - table: filter
     - chain: INPUT
     - in-interface: eth1
-    - source: 10.0.0.0/8
+    - protocol: udp
+    - dport: 67:68
+    - jump: ACCEPT
+    - save: True
+
+# allow DNS from LAN and lo
+allow_dns_from_LAN_udp:
+  iptables.append:
+    - table: filter
+    - chain: INPUT
+    - in-interface: eth1
+    - protocol: udp
+    - dport: 53
+    - jump: ACCEPT
+    - save: True
+
+allow_dns_from_LAN_tcp:
+  iptables.append:
+    - table: filter
+    - chain: INPUT
+    - in-interface: eth1
+    - protocol: tcp
+    - dport: 53
+    - jump: ACCEPT
+    - save: True
+
+allow_dns_from_lo_udp:
+  iptables.append:
+    - table: filter
+    - chain: INPUT
+    - in-interface: lo
+    - protocol: udp
+    - dport: 53
+    - jump: ACCEPT
+    - save: True
+
+allow_dns_from_lo_tcp:
+  iptables.append:
+    - table: filter
+    - chain: INPUT
+    - in-interface: lo
+    - protocol: tcp
+    - dport: 53
     - jump: ACCEPT
     - save: True
 
