@@ -27,6 +27,18 @@ disable_ipv6:
       - name: net.ipv6.conf.all.disable_ipv6
       - value: 1
 
+default_disable_ipv6:
+  module.run:
+    - sysctl.assign:
+      - net.ipv6.conf.default.disable_ipv6
+      - value: 1
+
+lo_disable_ipv6:
+  module.run:
+    - sysctl.assign:
+      - net.ipv6.conf.lo.disable_ipv6
+      - value: 1 
+
 # dnsmasq for dhcp and dns
 install_dnsmasq:
   pkg.installed:
@@ -86,26 +98,6 @@ allow_dns_from_LAN_tcp:
     - table: filter
     - chain: INPUT
     - in-interface: eth1
-    - protocol: tcp
-    - dport: 53
-    - jump: ACCEPT
-    - save: True
-
-allow_dns_from_lo_udp:
-  iptables.append:
-    - table: filter
-    - chain: INPUT
-    - in-interface: lo
-    - protocol: udp
-    - dport: 53
-    - jump: ACCEPT
-    - save: True
-
-allow_dns_from_lo_tcp:
-  iptables.append:
-    - table: filter
-    - chain: INPUT
-    - in-interface: lo
     - protocol: tcp
     - dport: 53
     - jump: ACCEPT
