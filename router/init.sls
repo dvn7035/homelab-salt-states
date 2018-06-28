@@ -17,27 +17,31 @@ dhcpcd:
 # forward ipv4 and disable ipv6
 enable_ipv4_forwarding:
   module.run:
-    - sysctl.assign:
+    - sysctl.persist:
       - name: net.ipv4.ip_forward
       - value: 1
+      - config: /etc/sysctl.conf
 
 disable_ipv6:
   module.run:
-    - sysctl.assign:
+    - sysctl.persist:
       - name: net.ipv6.conf.all.disable_ipv6
       - value: 1
+      - config: /etc/sysctl.conf
 
 default_disable_ipv6:
   module.run:
-    - sysctl.assign:
+    - sysctl.persist:
       - net.ipv6.conf.default.disable_ipv6
       - value: 1
+      - config: /etc/sysctl.conf
 
 lo_disable_ipv6:
   module.run:
-    - sysctl.assign:
+    - sysctl.persist:
       - net.ipv6.conf.lo.disable_ipv6
       - value: 1 
+      - config: /etc/sysctl.conf
 
 # dnsmasq for dhcp and dns
 install_dnsmasq:
