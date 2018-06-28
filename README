@@ -1,15 +1,20 @@
-This is my configuration for my raspberry pi. The states are meant
-to be run headless without a salt master server. You can use this
+This is my configuration for my raspberry pi. Some of the states 
+are meant to be run headless and some with a master. You can use this
 as inspiration for projects on your pi, but be aware some of the
 configuration only applies to my situation (e.g. the authorized_key
 file specifies that my private ssh key can log in as root over ssh;
 probably something you don't want me to be able to do to your pi).
 
-Follow instructions here to install salt-minion
-https://repo.saltstack.com/#raspbian
+Notes for myself on fresh raspbian install:
 
-Then run:
-# apt install git
-# git clone https://github.com/dvn7035/raspberry-pi-salt-states.git
-# ln -s $(pwd)/raspberry-pi-salt-states/ /srv/salt
-# salt-call --local state.apply
+sudo su
+cd /root
+
+#Follow instructions here to install salt-minion
+#https://repo.saltstack.com/#raspbian
+
+apt install git
+git clone https://github.com/dvn7035/raspberry-pi-salt-states.git
+cp -f raspberry-salt-states/salt-minion-no-master/minion /etc/salt/minion
+ln -s $(pwd)/raspberry-pi-salt-states/ /srv/salt
+salt-call --local state.apply
