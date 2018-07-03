@@ -16,6 +16,7 @@ cd /root
 apt install git
 git clone https://github.com/dvn7035/raspberry-pi-salt-states.git
 cp -f raspberry-pi-salt-states/salt-minion-no-master/minion /etc/salt/minion
+# also edit minion_id 
 service salt-minion restart
 ln -s $(pwd)/raspberry-pi-salt-states/ /srv/salt
 salt-call --local state.apply
