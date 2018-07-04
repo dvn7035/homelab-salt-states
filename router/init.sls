@@ -127,3 +127,36 @@ nat_masquerading:
     - out-interface: eth0
     - jump: MASQUERADE
     - save: True
+
+
+# Controller for Ubiquiti Unifi AP
+install_oracle:
+  pkg.installed:
+    - name: oracle-java8-jdk
+
+ubiquiti_repo:
+  pkgrepo.managed:
+    - name: deb http://www.ubnt.com/downloads/unifi/debian stable ubiquiti
+    - key_url: https://dl.ubnt.com/unifi/unifi-repo.gpg
+    - require_in:
+      - pkg: unifi
+
+install_unifi:
+  pkg.installed:
+    - name: unifi
+    - fromrepo: stable
+
+allow_unifi_web_controller:
+  iptables.append:
+    - table: filter
+    - chain: INPUT
+    - in-interface: eth1
+    - protocol: tcp
+    - dport: 8443
+    - jump: ACCEPT
+    - save: True
+
+stop_mongodb:
+  service.dead:
+    - name: mongodb
+    - enable: False
