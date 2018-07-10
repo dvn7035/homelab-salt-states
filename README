@@ -5,10 +5,11 @@ configuration only applies to my situation (e.g. the authorized_key
 file specifies that my private ssh key can log in as root over ssh;
 probably something you don't want me to be able to do to your pi).
 
-Notes for myself on fresh raspbian install:
+Notes for myself on fresh raspbian install on whitebase:
 
 sudo su
 cd /root
+raspi-config
 
 #Follow instructions here to install salt-minion
 #https://repo.saltstack.com/#raspbian
