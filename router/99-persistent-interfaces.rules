@@ -1,2 +1,0 @@
-ACTION=="add", SUBSYSTEM=="net", SUBSYSTEMS=="usb", ATTR{address}=="00:50:b6:24:51:d7", NAME="wan0"
-ACTION=="add", SUBSYSTEM=="net", SUBSYSTEMS=="usb", ATTR{address}=="00:50:b6:25:c2:f5", NAME="lan0"

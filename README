@@ -7,9 +7,13 @@ probably something you don't want me to be able to do to your pi).
 
 Notes for myself on fresh raspbian install on whitebase:
 
+# configure localization options, memory split, and most importantly to use
+# predictable interface names (at least until I can get custom interface names
+# to be stateful)
+sudo raspi-config
+
 sudo su
 cd /root
-raspi-config
 
 #Follow instructions here to install salt-minion
 #https://repo.saltstack.com/#raspbian
