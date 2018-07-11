@@ -6,3 +6,4 @@ base:
     - iptables-base
   '*whitebase*':
     - router
+    - fail2ban

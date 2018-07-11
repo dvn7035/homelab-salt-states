@@ -16,8 +16,8 @@ dhcpcd:
 # set routing tables
 
 # TODO: figure out how to manage routing tables in a stateful manner
-route delete -net 0.0.0.0 gw 10.0.0.1 netmask 0.0.0.0 dev enx0050b625c2f5:
-  cmd.run
+#route delete -net 0.0.0.0 gw 10.0.0.1 netmask 0.0.0.0 dev enx0050b625c2f5:
+#  cmd.run
 
 # forward ipv4 and disable ipv6
 enable_ipv4_forwarding:
