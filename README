@@ -25,3 +25,4 @@ cp -f raspberry-pi-salt-states/salt-minion-no-master/minion /etc/salt/minion
 service salt-minion restart
 ln -s $(pwd)/raspberry-pi-salt-states/ /srv/salt
 salt-call --local state.apply
+# change /etc/ddclient.conf too
