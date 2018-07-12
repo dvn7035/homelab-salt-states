@@ -7,3 +7,4 @@ base:
   '*whitebase*':
     - router
     - fail2ban
+    - ddclient
