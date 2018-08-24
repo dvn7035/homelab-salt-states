@@ -1,23 +1,34 @@
-# configure interfaces subnet mask
-dhcpcd_configuration:
+# disable dhcpcd
+disable_dhcpcd:
+  service.dead:
+    - name: dhcpcd
+    - enable: False
+
+# configure interface names with systemd.network
+# needs a reboot to actually take effect
+name_for_wan_interface:
   file.managed:
-    - name: /etc/dhcpcd.conf
-    - source: file:///srv/salt/router/dhcpcd.conf
+    - name: /etc/systemd/network/25-wan0.link
+    - source: salt://router/25-wan0.link
     - user: root
     - group: root
-    - mode: 664
+    - mode: 644
 
-dhcpcd:
-  service.running:
-    - restart: True
-    - watch:
-        - file: /etc/dhcpcd.conf 
+name_for_lan_interface:
+  file.managed:
+    - name: /etc/systemd/network/25-lan0.link
+    - source: salt://router/25-lan0.link
+    - user: root
+    - group: root
+    - mode: 644
 
-# set routing tables
-
-# TODO: figure out how to manage routing tables in a stateful manner
-#route delete -net 0.0.0.0 gw 10.0.0.1 netmask 0.0.0.0 dev enx0050b625c2f5:
-#  cmd.run
+configure_ip_and_dhcp_for_interfaces:
+  file.managed:
+    - name: /etc/network/interfaces.d/router-interface-settings
+    - source: salt://router/router-interface-settings
+    - user: root
+    - group: root
+    - mode: 644
 
 # forward ipv4 and disable ipv6
 enable_ipv4_forwarding:
@@ -48,212 +59,35 @@ lo_disable_ipv6:
       - value: 1 
       - config: /etc/sysctl.conf
 
-# dnsmasq for dhcp and dns
-install_dnsmasq:
-  pkg.installed:
-    - pkgs:
-      - dnsmasq
-
-dnsmasq_configuration:
-  file.managed:
-    - name: /etc/dnsmasq.conf
-    - source: file:///srv/salt/router/dnsmasq.conf
-    - user: root
-    - group: root
-    - mode: 644
-
-dnsmasq:
-  service.running:
-    - restart: True
-    - watch:
-      - /etc/dnsmasq.conf
-
 # iptable rules for routing
 
-#TODO: Figure out how to rename interfaces and apply immediately
-# in saltstack
-
-# forward all traffic originating from LAN
-forward_all_originating_LAN:
+# forward all traffic from lan0 to wan0
+forward_all_traffic_from_lan0_to_wan0:
   iptables.append:
     - table: filter
     - chain: FORWARD
-    - in-interface: enx0050b625c2f5
+    - in-interface: lan0
+    - out-interface: wan0
     - jump: ACCEPT
     - save: True 
 
-# allow dhcp from LAN
-allow_dhcp_lan:
-  iptables.append:
-    - table: filter
-    - chain: INPUT
-    - in-interface: enx0050b625c2f5
-    - protocol: udp
-    - dport: 67:68
-    - jump: ACCEPT
-    - save: True
-
-# allow DNS from LAN
-allow_dns_from_LAN_udp:
-  iptables.append:
-    - table: filter
-    - chain: INPUT
-    - in-interface: enx0050b625c2f5
-    - protocol: udp
-    - dport: 53
-    - jump: ACCEPT
-    - save: True
-
-allow_dns_from_LAN_tcp:
-  iptables.append:
-    - table: filter
-    - chain: INPUT
-    - in-interface: enx0050b625c2f5
-    - protocol: tcp
-    - dport: 53
-    - jump: ACCEPT
-    - save: True
-
-# forward all related and established traffic from WAN
-forward_related_established_originating_WAN:
+# forward all related and established traffic from wan0
+forward_related_established_from_wan0:
   iptables.append:
     - table: filter
     - chain: FORWARD
-    - in-interface: enx0050b62451d7
-    - out-interface: enx0050b625c2f5
+    - in-interface: wan0
+    - out-interface: lan0
     - match: conntrack
     - ctstate: ESTABLISHED,RELATED
     - jump: ACCEPT
     - save: True
 
-# do NAT masquerading for packets headed to WAN
+# do NAT masquerading for packets headed to wan0
 nat_masquerading:
   iptables.append:
     - table: nat
     - chain: POSTROUTING
-    - out-interface: enx0050b62451d7
+    - out-interface: wan0
     - jump: MASQUERADE
     - save: True
-
-
-# Controller for Ubiquiti Unifi AP
-install_oracle:
-  pkg.installed:
-    - name: oracle-java8-jdk
-
-ubiquiti_repo:
-  pkgrepo.managed:
-    - name: deb http://www.ubnt.com/downloads/unifi/debian stable ubiquiti
-    - key_url: https://dl.ubnt.com/unifi/unifi-repo.gpg
-    - require_in:
-      - pkg: unifi
-
-install_unifi:
-  pkg.installed:
-    - name: unifi
-    - fromrepo: stable
-
-allow_unifi_STUN:
-  iptables.append:
-    - table: filter
-    - chain: INPUT
-    - in-interface: enx0050b625c2f5
-    - protocol: udp
-    - dport: 3478
-    - jump: ACCEPT
-    - save: True
-
-allow_unifi_device_controller_communication:
-  iptables.append:
-    - table: filter
-    - chain: INPUT
-    - in-interface: enx0050b625c2f5
-    - protocol: tcp
-    - dport: 8080
-    - jump: ACCEPT
-    - save: True
-
-allow_unifi_web_controller:
-  iptables.append:
-    - table: filter
-    - chain: INPUT
-    - in-interface: enx0050b625c2f5
-    - protocol: tcp
-    - dport: 8443
-    - jump: ACCEPT
-    - save: True
-
-allow_unifi_HTTP_portal_redirect:
-  iptables.append:
-    - table: filter
-    - chain: INPUT
-    - in-interface: enx0050b625c2f5
-    - protocol: tcp
-    - dport: 8880
-    - jump: ACCEPT
-    - save: True
-
-allow_unifi_HTTPS_portal_redirect:
-  iptables.append:
-    - table: filter
-    - chain: INPUT
-    - in-interface: enx0050b625c2f5
-    - protocol: tcp
-    - dport: 8843
-    - jump: ACCEPT
-    - save: True
-
-allow_unifi_mobile_speed_test:
-  iptables.append:
-    - table: filter
-    - chain: INPUT
-    - in-interface: enx0050b625c2f5
-    - protocol: tcp
-    - dport: 6789
-    - jump: ACCEPT
-    - save: True
-
-allow_unifi_local_database_comm:
-  iptables.append:
-    - table: filter
-    - chain: INPUT
-    - in-interface: enx0050b625c2f5
-    - protocol: tcp
-    - dport: 27117
-    - jump: ACCEPT
-    - save: True
-
-allow_unifi_AP_EDU_broadcast:
-  iptables.append:
-    - table: filter
-    - chain: INPUT
-    - in-interface: enx0050b625c2f5
-    - protocol: udp
-    - dport: 5656:5699
-    - jump: ACCEPT
-    - save: True
-
-allow_unifi_AP_discovery:
-  iptables.append:
-    - table: filter
-    - chain: INPUT
-    - in-interface: enx0050b625c2f5
-    - protocol: udp
-    - dport: 10001
-    - jump: ACCEPT
-    - save: True
-
-allow_unifi_controller_L2_discoverable:
-  iptables.append:
-    - table: filter
-    - chain: INPUT
-    - in-interface: enx0050b625c2f5
-    - protocol: udp
-    - dport: 1900
-    - jump: ACCEPT
-    - save: True
-
-stop_mongodb:
-  service.dead:
-    - name: mongodb
-    - enable: False
