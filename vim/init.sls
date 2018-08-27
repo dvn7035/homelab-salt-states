@@ -2,7 +2,6 @@ vim:
   pkg:
     - installed
 
-~/.vimrc:
+/root/.vimrc:
   file.managed:
-    - source:
-      - file:///srv/salt/vim/vimrc
+    - source: salt://vim/vimrc

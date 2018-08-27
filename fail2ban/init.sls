@@ -4,7 +4,7 @@ install_fail2ban:
 
 /etc/fail2ban/jail.local:
   file.managed:
-    - source: file:///srv/salt/fail2ban/jail.local
+    - source: salt://fail2ban/jail.local
     - user: root
     - group: root
     - mode: 644

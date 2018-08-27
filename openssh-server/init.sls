@@ -15,15 +15,15 @@ allow_ssh:
 sshd_config:
   file.managed:
     - name: /etc/ssh/sshd_config
-    - source: file:///srv/salt/openssh-server/sshd_config
+    - source: salt://openssh-server/sshd_config
     - user: root
     - group: root
     - mode: 644
 
 ssh_authorized_keys:
   file.managed:
-    - name: ~/.ssh/authorized_keys
-    - source: file:///srv/salt/openssh-server/authorized_keys
+    - name: /root/.ssh/authorized_keys
+    - source: salt://openssh-server/authorized_keys
     - user: root
     - group: root
     - mode: 600
@@ -31,10 +31,10 @@ ssh_authorized_keys:
 
 ssh:
   service.running:
-    - reload: True
+    - restart: True
     - watch:
       - file: /etc/ssh/sshd_config
-      - file: ~/.ssh/authorized_keys
+      - file: /root/.ssh/authorized_keys
 pi:
   user.absent:
     - purge: True

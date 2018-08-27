@@ -7,7 +7,7 @@ ddclient:
 
 /etc/ddclient.conf:
   file.managed:
-    - source: file:///srv/salt/ddclient/ddclient.conf
+    - source: salt://ddclient/ddclient.conf
     - user: root
     - group: root
     - mode: 700
