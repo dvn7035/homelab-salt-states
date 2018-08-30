@@ -14,6 +14,16 @@ install_unifi:
   pkg.installed:
     - name: unifi
     - fromrepo: stable
+    - require:
+      - pkg: install_oracle
+      - pkgrepo: ubiquiti_repo 
+
+stop_mongodb:
+  service.dead:
+    - name: mongodb
+    - enable: False
+    - require:
+      - pkg: install_unifi
 
 allow_unifi_STUN:
   iptables.append:
@@ -24,6 +34,8 @@ allow_unifi_STUN:
     - dport: 3478
     - jump: ACCEPT
     - save: True
+    - require:
+      - sls: iptables-base
 
 allow_unifi_device_controller_communication:
   iptables.append:
@@ -34,6 +46,8 @@ allow_unifi_device_controller_communication:
     - dport: 8080
     - jump: ACCEPT
     - save: True
+    - require:
+      - sls: iptables-base
 
 allow_unifi_web_controller:
   iptables.append:
@@ -44,6 +58,8 @@ allow_unifi_web_controller:
     - dport: 8443
     - jump: ACCEPT
     - save: True
+    - require:
+      - sls: iptables-base
 
 allow_unifi_HTTP_portal_redirect:
   iptables.append:
@@ -54,6 +70,8 @@ allow_unifi_HTTP_portal_redirect:
     - dport: 8880
     - jump: ACCEPT
     - save: True
+    - require:
+      - sls: iptables-base
 
 allow_unifi_HTTPS_portal_redirect:
   iptables.append:
@@ -64,6 +82,8 @@ allow_unifi_HTTPS_portal_redirect:
     - dport: 8843
     - jump: ACCEPT
     - save: True
+    - require:
+      - sls: iptables-base
 
 allow_unifi_mobile_speed_test:
   iptables.append:
@@ -74,6 +94,8 @@ allow_unifi_mobile_speed_test:
     - dport: 6789
     - jump: ACCEPT
     - save: True
+    - require:
+      - sls: iptables-base
 
 allow_unifi_local_database_comm:
   iptables.append:
@@ -84,6 +106,8 @@ allow_unifi_local_database_comm:
     - dport: 27117
     - jump: ACCEPT
     - save: True
+    - require:
+      - sls: iptables-base
 
 allow_unifi_AP_EDU_broadcast:
   iptables.append:
@@ -94,6 +118,8 @@ allow_unifi_AP_EDU_broadcast:
     - dport: 5656:5699
     - jump: ACCEPT
     - save: True
+    - require:
+      - sls: iptables-base
 
 allow_unifi_AP_discovery:
   iptables.append:
@@ -104,6 +130,8 @@ allow_unifi_AP_discovery:
     - dport: 10001
     - jump: ACCEPT
     - save: True
+    - require:
+      - sls: iptables-base
 
 allow_unifi_controller_L2_discoverable:
   iptables.append:
@@ -114,8 +142,5 @@ allow_unifi_controller_L2_discoverable:
     - dport: 1900
     - jump: ACCEPT
     - save: True
-
-stop_mongodb:
-  service.dead:
-    - name: mongodb
-    - enable: False
+    - require:
+      - sls: iptables-base

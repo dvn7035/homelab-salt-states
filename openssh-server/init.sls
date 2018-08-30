@@ -1,7 +1,17 @@
-openssh-server:
-  pkg:
-    - installed
+pi:
+  user.absent:
+    - purge: True
+    - force: True
+    - require_in:
+      - pkg: install_openssh-server
 
+install_openssh-server:
+  pkg.installed:
+    - require_in:
+      - file: sshd_config
+      - file: ssh_authorized_keys
+      - service: ssh_service
+      
 # open tcp 22 for ssh
 allow_ssh:
   iptables.append:
@@ -11,6 +21,8 @@ allow_ssh:
     - proto: tcp
     - dport: 22
     - save: True
+    - require:
+      - sls: iptables-base
 
 sshd_config:
   file.managed:
@@ -29,13 +41,10 @@ ssh_authorized_keys:
     - mode: 600
     - makedirs: True
 
-ssh:
+ssh_service:
   service.running:
+    - name: ssh
     - restart: True
     - watch:
       - file: /etc/ssh/sshd_config
       - file: /root/.ssh/authorized_keys
-pi:
-  user.absent:
-    - purge: True
-    - force: True

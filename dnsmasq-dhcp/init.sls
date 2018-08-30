@@ -2,6 +2,9 @@
 install_dnsmasq:
   pkg.installed:
     - name: dnsmasq
+    - require_in:
+      - file: dnsmasq_configuration
+      - service: dnsmasq_service
 
 dnsmasq_configuration:
   file.managed:
@@ -11,7 +14,7 @@ dnsmasq_configuration:
     - group: root
     - mode: 644
 
-dnsmasq:
+dnsmasq_service:
   service.running:
     - restart: True
     - enable: True

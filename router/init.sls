@@ -69,7 +69,9 @@ forward_all_traffic_from_lan0_to_wan0:
     - in-interface: lan0
     - out-interface: wan0
     - jump: ACCEPT
-    - save: True 
+    - save: True
+    - require:
+      - sls: iptables-base
 
 # forward all related and established traffic from wan0
 forward_related_established_from_wan0:
@@ -82,6 +84,8 @@ forward_related_established_from_wan0:
     - ctstate: ESTABLISHED,RELATED
     - jump: ACCEPT
     - save: True
+    - require:
+      - sls: iptables-base
 
 # do NAT masquerading for packets headed to wan0
 nat_masquerading:
@@ -91,3 +95,5 @@ nat_masquerading:
     - out-interface: wan0
     - jump: MASQUERADE
     - save: True
+    - require:
+      - sls: iptables-base

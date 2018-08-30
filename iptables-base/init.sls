@@ -2,12 +2,21 @@ iptables:
   pkg.installed
 
 iptables-persistent:
-  pkg.installed
+  pkg.installed:
+    - require:
+      - pkg: iptables
+    - require_in:
+      - iptables: default_outgoing_accept
+      - iptables: default_incoming_drop
+      - iptables: default_forward_drop
+      - iptables: allow_ICMP
+      - iptables: allow_incoming_lo
+      - iptables: allow_established_related_incoming
 
 # iptables defaults
 
 # by default allow all outgoing
-default_allow_outgoing:
+default_outgoing_accept:
   iptables.set_policy:
     - table: filter
     - chain: OUTPUT
@@ -44,14 +53,6 @@ allow_incoming_lo:
     - table: filter
     - chain: INPUT
     - in-interface: lo
-    - jump: ACCEPT
-    - save: True
-
-allow_outgoing_lo:
-  iptables.append:
-    - table: filter
-    - chain: OUTPUT
-    - out-interface: lo
     - jump: ACCEPT
     - save: True
 
