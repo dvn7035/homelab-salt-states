@@ -1,7 +1,7 @@
 # Set up minion file
 /etc/salt/minion:
   file.managed:
-    - source: file:///srv/salt/salt-minion-no-master/minion
+    - source: salt://salt-minion/minion
 
 salt-minion:
   service.running:

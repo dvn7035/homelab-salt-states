@@ -16,7 +16,7 @@ install_ddclient:
     - group: root
     - mode: 700
 
-ddclient_servce:
+ddclient_service:
   service.running:
     - name: ddclient
     - enable: True

@@ -7,6 +7,7 @@ pi:
 
 install_openssh-server:
   pkg.installed:
+    - name: openssh-server
     - require_in:
       - file: sshd_config
       - file: ssh_authorized_keys

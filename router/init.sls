@@ -37,6 +37,8 @@ enable_ipv4_forwarding:
       - name: net.ipv4.ip_forward
       - value: 1
       - config: /etc/sysctl.conf
+    - require:
+      - sls: salt-minion
 
 disable_ipv6:
   module.run:
@@ -44,6 +46,8 @@ disable_ipv6:
       - name: net.ipv6.conf.all.disable_ipv6
       - value: 1
       - config: /etc/sysctl.conf
+    - require:
+      - sls: salt-minion
 
 default_disable_ipv6:
   module.run:
@@ -51,6 +55,8 @@ default_disable_ipv6:
       - net.ipv6.conf.default.disable_ipv6
       - value: 1
       - config: /etc/sysctl.conf
+    - require:
+      - sls: salt-minion
 
 lo_disable_ipv6:
   module.run:
@@ -58,6 +64,8 @@ lo_disable_ipv6:
       - net.ipv6.conf.lo.disable_ipv6
       - value: 1 
       - config: /etc/sysctl.conf
+    - require:
+      - sls: salt-minion
 
 # iptable rules for routing
 
