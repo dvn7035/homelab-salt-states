@@ -1,0 +1,16 @@
+$TTL 300
+@ IN SOA whitebase.internal.dvn7035.com. dvn7035.internal.dvn7035.com. (
+    2018081100 ; Serial
+    86400      ; Refresh
+    7200       ; Retry
+    3600000    ; Expire
+    172800     ; Negative Cache TTL
+)
+
+; NS records
+233.27.172.in-addr.arpa. IN NS whitebase.internal.dvn7035.com.
+
+; PTR records
+1 IN PTR whitebase.internal.dvn7035.com.
+2 IN PTR nahelargama.internal.dvn7035.com.
+3 IN PTR racailum.internal.dvn7035.com.
