@@ -1,3 +1,4 @@
 base:
   'whitebase':
     - ddclient
+    - router
