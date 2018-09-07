@@ -29,6 +29,7 @@ configure_ip_and_dhcp_for_interfaces:
     - user: root
     - group: root
     - mode: 644
+    - template: jinja
 
 # forward ipv4 and disable ipv6
 enable_ipv4_forwarding:
